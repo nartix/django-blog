@@ -1,0 +1,52 @@
+# Use an official Python runtime as a parent image
+FROM python:3.12-slim-bookworm
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV DJANGO_SETTINGS_MODULE=ferozfaiz.settings
+ENV PYTHONPATH=/app/ferozfaiz:$PYTHONPATH
+
+# {{ with secret "kv/data/django_token" }}
+ENV VAULT_ADDR={{ .Data.data.VAULT_ADDR }}
+ENV VAULT_TOKEN={{ .Data.data.VAULT_TOKEN }}
+# {{ end }}
+
+# Set work directory
+WORKDIR /app
+
+COPY ./django/requirements.txt /app/
+
+# psycopg2 dependencies otherwise it fails to install with error: pg_config executable not found
+# RUN apt-get update && apt-get install -y libpq-dev gcc python3-dev musl-dev
+
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+ENV ENVCONSUL_VERSION 0.13.2
+RUN apt-get update && apt-get install -y wget unzip \
+    && wget https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip \
+    && unzip envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin \
+    && chmod +x /usr/local/bin/envconsul \
+    && rm -rf envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip \
+    && apt-get remove -y wget unzip \
+    && apt-get autoremove -y \
+    && apt-get clean
+
+# Copy project
+COPY ./django/ /app/
+
+RUN chmod +x /app/update_cert.sh /app/start_app.sh
+
+# Collect static files
+RUN envconsul -config=/app/envconsul-config.hcl -- python ferozfaiz/manage.py collectstatic --noinput
+
+# Application port
+EXPOSE 8000
+
+# Run Gunicorn
+# CMD gunicorn ferozfaiz.wsgi:application --bind 0.0.0.0:8000
+CMD ["envconsul", "-config=/app/envconsul-config.hcl", "--", "/app/start_app.sh", "prod"]

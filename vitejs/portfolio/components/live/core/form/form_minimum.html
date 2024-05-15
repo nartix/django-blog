@@ -1,0 +1,70 @@
+<title></title>
+
+<!-- Login Section -->
+<section class="container mx-auto max-w-md flex flex-row flex-grow items-center justify-center">
+  <div class="mx-2 bg-white/75 rounded-lg shadow-md p-8 mt-10 mb-10 basis-full">
+    <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6"></h2>
+
+    <div class="flex flex-col items-center">
+      <!-- Sign in with Google as a Button -->
+      <div class="text-center mb-2">
+        <a
+          hx-boost="false"
+          href="?next="
+          class="w-60 inline-block px-4 py-2 rounded border bg-white border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50"
+        >
+          <i class="fab fa-google mr-2"></i>
+        </a>
+      </div>
+      <!-- Sign in with Microsoft as a Button -->
+      <div class="text-center mb-2">
+        <a
+          hx-boost="false"
+          href="?next="
+          class="w-60 inline-block px-4 py-2 rounded border bg-white border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50"
+        >
+          <i class="fab fa-microsoft mr-2"></i>
+        </a>
+      </div>
+    </div>
+    <!-- Separator with 'Or' -->
+    <div class="flex items-center justify-center my-4">
+      <div class="flex-grow border-t border-gray-300"></div>
+      <span class="flex-shrink mx-4 text-gray-400"></span>
+      <div class="flex-grow border-t border-gray-300"></div>
+    </div>
+
+    <div
+      class="px-4 py-2.5 rounded relative text-sm text-center bg-gray-100 border border-gray-400 text-gray-700 bg-blue-100 border border-blue-400 text-blue-700 bg-green-100 border border-green-400 text-green-700 bg-orange-100 border border-orange-300 text-orange-500 bg-red-100 border border-red-400 text-red-700"
+      role="alert"
+    ></div>
+
+    <p class="text-center text-gray-500 mb-6"></p>
+    <form id="signup-form" action="" method="post" class="space-y-6">
+      <input type="hidden" name="next" value="" />
+
+      <div class="flex">
+        <!--<div class="flex items-center">
+            <input type="checkbox" id="remember_me" name="remember_me" class="mr-2" />
+            <label for="remember_me" class="text-xs sm:text-sm"></label> 
+          </div>-->
+        <div class="ml-auto">
+          <a href="" class="text-xs sm:text-sm text-teal-500 hover:text-teal-700"></a>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button
+          type="submit"
+          class="w-full py-2 rounded bg-opacity-80 bg-teal-600 hover:bg-teal-600 focus:ring-teal-500 focus:ring-opacity-50 text-white text-sm focus:outline-none focus:ring-2"
+        ></button>
+      </div>
+
+      <div class="mt-6 text-center">
+        <p class="text-sm">
+          <a href="" class="text-teal-500 hover:text-teal-700"></a>
+        </p>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body x-data="{ menuOpen: false }" x-bind:class="{ 'overflow-hidden': menuOpen }" hx-boost="true" hx-target="#main-section">
+    <script type="module" src="/main.js"></script>
+    <div class="flex flex-col relative">
+      <img
+        src="https://images.unsplash.com/photo-1596367407372-96cb88503db6?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Background Image"
+        class="absolute h-full w-full object-cover inset-0"
+      />
+      <div class="z-10 flex flex-col min-h-screen justify-between">
+        <!-- Header bg-opacity-20 bg-gray-400 -->
+        <header class="p-3">
+          <nav class="container mx-auto max-w-screen-lg flex justify-between items-center">
+            <div class="font-extrabold text-2xl text-gray-900 text-opacity-80">
+              <a href="/"> ferozfaiz.com </a>
+            </div>
+
+            <!-- Desktop menu -->
+            <div class="hidden md:flex flex-grow justify-center items-center text-gray-900 text-opacity-75">
+              <a
+                href="/components/test.html"
+                hx-replace-url="true"
+                class="px-4 hover:text-gray-500"
+                hx-get="/components/test.html"
+                hx-target="#main-section"
+                >Blog</a
+              >
+              <a
+                href="/components/projects.html"
+                hx-get="/components/projects.html"
+                hx-target="#main-section"
+                hx-replace-url="true"
+                class="px-4 hover:text-gray-500"
+                >Projects</a
+              >
+              <a href="#crud" class="px-4 hover:text-gray-500">About</a>
+              <a href="#crud" class="px-4 hover:text-gray-500">Resume</a>
+            </div>
+
+            <!-- Login button -->
+            <div class="md:ml-0 ml-auto">
+              <a
+                href="/components/login.html"
+                hx-get="/components/login.html"
+                hx-replace-url="true"
+                hx-target="#main-section"
+                class="border-[1px] border-gray-400 border-opacity-40 px-3 py-1 bg-[#a8c3c7] bg-opacity-20 hover:bg-opacity-70 text-gray-800 text-opacity-75 font-bold rounded"
+              >
+                Login
+              </a>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden mr-1 ml-5">
+              <button
+                class="text-gray-900 text-opacity-80 hover:text-opacity-100 focus:outline-none relative"
+                x-ref="menuButton"
+                @click="menuOpen = ! menuOpen"
+              >
+                <!-- Bars Icon -->
+                <i
+                  class="fas fa-bars fa-lg transition-all duration-300"
+                  :class="{ 'transform rotate-180 opacity-0': menuOpen }"
+                ></i>
+                <!-- Times Icon -->
+                <i
+                  class="fas fa-times fa-xl transition-all duration-300 absolute top-[11px] left-0"
+                  :class="{ 'transform rotate-180 opacity-100': menuOpen, 'opacity-0': !menuOpen }"
+                ></i>
+              </button>
+            </div>
+
+            <!-- Mobile menu -->
+            <div
+              class="fixed top-[54px] left-0 w-full h-screen bg-[#cfd6da] z-50 text-center border-t border-gray-500 border-opacity-25"
+              x-show="menuOpen"
+              x-anchor="$refs.menuButton"
+              x-cloak
+              x-transition.duration.300ms
+            >
+              <a
+                href="#blog"
+                hx-get="/components/indexMainSection.html"
+                hx-target="#main-section"
+                class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80"
+                @click="menuOpen = false"
+                >Blog</a
+              >
+              <a
+                href="/"
+                hx-get="/components/indexMainSection2.html"
+                hx-target="#main-section"
+                @click="menuOpen = false"
+                class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80"
+                >About</a
+              >
+              <a href="#crud" @click="menuOpen = false" class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80"
+                >Projects</a
+              >
+            </div>
+          </nav>
+        </header>
+
+        <!-- Main section -->
+        <main class="" id="main-section">
+          <section class="container mx-auto max-w-screen-lg flex-grow flex items-center justify-center text-center flex-col">
+            <article class="bg-white p-6 rounded-lg shadow-lg">
+              <!-- User image and information -->
+              <div class="flex items-center">
+                <!-- Font Awesome User Icon -->
+                <i class="fas fa-user-circle text-6xl text-gray-700"></i>
+                <div class="ml-4">
+                  <h3 class="text-xl font-semibold text-gray-900">John Doe</h3>
+                  <p class="text-gray-600">Software Engineer</p>
+                  <span class="text-gray-500 text-sm">Posted on January 25, 2024</span>
+                </div>
+              </div>
+
+              <!-- Blog Post Content -->
+              <div class="mt-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-3">The Future of Full-Stack Development</h2>
+                <p class="text-gray-600 text-justify">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+                  magna aliqua...
+                </p>
+                <a href="#" class="text-blue-600 hover:text-blue-800 mt-4 inline-block">Read more</a>
+              </div>
+            </article>
+          </section>
+          <!--  <section class="container mx-auto max-w-screen-lg"></section> -->
+        </main>
+
+        <!-- Footer -->
+        <footer class="p-3">
+          <section class="container mx-auto max-w-screen-lg flex justify-between items-center">
+            <p class="text-gray-500">&copy;2024 Feroz Faiz</p>
+            <div class="flex space-x-5">
+              <a
+                href="https://www.linkedin.com/in/your-linkedin"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fab fa-linkedin fa-lg"></i>
+              </a>
+              <a
+                href="mailto:your-email@example.com"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fas fa-envelope fa-lg"></i>
+              </a>
+              <a
+                href="your-resume-link.pdf"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fas fa-file-alt fa-lg"></i>
+              </a>
+              <a
+                href="https://github.com/your-github"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fab fa-github fa-lg"></i>
+              </a>
+            </div>
+          </section>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

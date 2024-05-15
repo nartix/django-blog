@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-blog-home-celery
+  labels:
+    app: django-blog-home-celery
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: django-blog-home-celery
+  template:
+    metadata:
+      labels:
+        app: django-blog-home-celery
+    spec:
+      imagePullSecrets:
+        - name: ecr-docker-login-token-from-action
+      containers:
+        - name: django-blog-home-celery
+          image: 155097172472.dkr.ecr.us-east-2.amazonaws.com/portfolio-django-home-celery:2024.03.30.563846347
+          imagePullPolicy: Always
+          args:
+            [
+              "envconsul",
+              "-config=/app/envconsul-config.hcl",
+              "--",
+              "/app/start_app.sh",
+              "celery",
+            ]
+          env:
+            - name: DJANGO_DEBUG
+              value: "False"

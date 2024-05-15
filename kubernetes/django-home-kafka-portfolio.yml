@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-blog-home-kafka
+  labels:
+    app: django-blog-home-kafka
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: django-blog-home-kafka
+  template:
+    metadata:
+      labels:
+        app: django-blog-home-kafka
+    spec:
+      imagePullSecrets:
+        - name: ecr-docker-login-token-from-action
+      containers:
+        - name: django-blog-home-kafka
+          image: 155097172472.dkr.ecr.us-east-2.amazonaws.com/portfolio-django-home-kafka:2024.03.30.563846347
+          imagePullPolicy: Always
+          args:
+            [
+              "envconsul",
+              "-config=/app/envconsul-config.hcl",
+              "--",
+              "/app/start_app.sh",
+              "kafka",
+            ]
+          env:
+            # Kafka topics and group required environment variables
+            - name: KAFKA_TOPIC
+              value: "djangologs"
+            - name: KAFKA_TOPIC_GROUP
+              value: "djangologs-group"
+            - name: DJANGO_DEBUG
+              value: "False"

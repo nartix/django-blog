@@ -1,0 +1,230 @@
+<section id="projects" class="bg-white/80">
+  <div class="container max-w-screen-lg mx-auto py-10">
+    <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
+      <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900">Our Blog</h2>
+      <p class="font-light text-gray-500 sm:text-xl">
+        This is a fully functional blog where registered users can create, edit and delete their posts. It also includes a
+        markdown editor for the post content.
+      </p>
+    </div>
+    <div class="grid grid-cols-1 gap-8 max-w-screen-md mx-auto">
+      <nav aria-label="Page navigation example" class="p-2">
+        <ul class="list-style-none flex justify-center" x-data="paginationDropdownState()" >
+          <li class="hidden md:block relative" id="showMobileDropdown">
+            <a
+              @click.prevent="toggleMobilePaginationDropdown(); togglePaginationDropdown()"
+              href="#!"
+              class="relative block rounded bg-transparent mx-px pl-3 pr-5 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-200"
+            >
+              Page 1 of 5 <i class="absolute top-[7px] right-2 fa-solid fa-sort-down"></i>
+            </a>
+          </li>
+          <li>
+            <a
+              class="pointer-events-none relative block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300"
+            >
+              <i class="fa-solid fa-caret-left inline md:hidden"></i><i class="fa-solid fa-caret-left inline md:hidden"></i>
+              <span class="hidden md:block">First</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="pointer-events-none relative block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300"
+              >Prev</a
+            >
+          </li>
+          <!-- Hide individual page numbers on small screens -->
+          <li class="hidden md:block">
+            <a
+              class="relative block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-200"
+              href="#!"
+              >1</a
+            >
+          </li>
+          <li class="hidden md:block">
+            <a
+              class="relative block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-200"
+              href="#!"
+              >2</a
+            >
+          </li>
+          <li class="hidden md:block" aria-current="page">
+            <a
+              class="relative block rounded bg-gray-300 mx-px px-3 py-1.5 text-sm font-medium text-black-700 transition-all duration-300"
+              href="#!"
+              >3</a
+            >
+          </li>
+          <li class="hidden md:block">
+            <a
+              class="relative block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-200"
+              href="#!"
+              >4</a
+            >
+          </li>
+          <li class="hidden md:block">
+            <a
+              class="relative block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-200"
+              href="#!"
+              >5</a
+            >
+          </li>
+          <!-- Display "Page 4 of 50" on small screens -->
+          <li class="md:hidden relative" :class="{ 'block': showMobilePaginationDropdown, 'md:hidden': !showMobilePaginationDropdown }">
+            <a
+              @click.prevent="showPaginationDropdown = !showPaginationDropdown"
+              href="#!"
+              :class="{ 'block': !showMobilePaginationDropdown, 'md:hidden': showMobilePaginationDropdown }"
+              class="relative block rounded bg-transparent bg-gray-300 mx-px pl-3 pr-5 py-1.5 text-sm text-neutral-600"
+              >Page 4 of 50 <i class="absolute top-[7px] right-2 fa-solid fa-sort-down"></i
+            ></a>
+            <!-- Mobile dropdown -->
+            <form
+              x-show="showPaginationDropdown"
+              @click.away="resetMobilePaginationDropdown(); resetPaginationDropdown()"
+              :class="{ 'left-1/2 transform -translate-x-1/2': showPaginationDropdown, 'left-0 transform -translate-x-96 top-8': showMobilePaginationDropdown }"
+              class="absolute  mt-2 p-2 w-max border border-gray-400 bg-white shadow-lg rounded-md flex justify-center items-center"
+              style="display: none"
+              tabindex="0"
+              method="GET"
+            >
+              <label for="page-input" class="text-center pr-2 text-sm font-medium text-gray-700 text-nowrap"
+                >Jump to page:
+              </label>
+
+              <input
+                id="page-input"
+                name="page"
+                type="number"
+                min="1"
+                max="15"
+                placeholder=""
+                class="text-sm relative border-gray-300 border rounded-l-md placeholder-gray-400 focus:border-teal-500 focus:outline-none p-1.5 w-16"
+              />
+
+              <div class="text-sm p-1.5 text-gray-500 bg-gray-200 rounded-r-md text-nowrap border-gray-300 border-y border-r">
+                / 55
+              </div>
+
+              <button
+                type="submit"
+                class="ml-2 inline-flex justify-center p-1.5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-nowrap"
+              >
+                Go
+              </button>
+            </form>
+          </li>
+          <li>
+            <a
+              class="block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-200"
+              href="#!"
+              >Next</a
+            >
+          </li>
+          <li>
+            <a
+              href="#!"
+              class="block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-200"
+            >
+              <span class="hidden md:block">Last</span>
+              <i class="fa-solid fa-caret-right visible md:hidden"></i><i class="fa-solid fa-caret-right visible md:hidden"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <article class="p-2">
+        <div class="flex justify-between items-center mb-5 text-gray-500">
+          <span
+            class="bg-gray-200 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-800"
+          >
+            <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"
+              ></path>
+            </svg>
+            Tutorial
+          </span>
+          <span class="text-sm">14 days ago</span>
+        </div>
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          <a href="#">How to quickly deploy a static website</a>
+        </h2>
+        <p class="mb-5 font-light text-gray-500">
+          Static websites are now used to bootstrap lots of websites and are becoming the basis for a variety of tools that even
+          influence...
+        </p>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <i class="fa-solid fa-circle-user fa-xl text-gray-500"></i>
+            <span class="font-medium"> Feroz Faiz </span>
+          </div>
+        </div>
+      </article>
+      <article class="p-2">
+        <div class="flex justify-between items-center mb-5 text-gray-500">
+          <span
+            class="bg-gray-200 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-800"
+          >
+            <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"
+              ></path>
+            </svg>
+            Tutorial
+          </span>
+          <span class="text-sm">14 days ago</span>
+        </div>
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          <a href="#">How to quickly deploy a static website</a>
+        </h2>
+        <p class="mb-5 font-light text-gray-500">
+          Static websites are now used to bootstrap lots of websites and are becoming the basis for a variety of tools that even
+          influence...
+        </p>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <img
+              class="w-7 h-7 rounded-full"
+              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+              alt="Jese Leos avatar"
+            />
+            <span class="font-medium"> Jese Leos </span>
+          </div>
+        </div>
+      </article>
+      <article class="p-2">
+        <div class="flex justify-between items-center mb-5 text-gray-500">
+          <span
+            class="bg-gray-200 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-800"
+          >
+            <svg class="mr-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"
+              ></path>
+            </svg>
+            Tutorial
+          </span>
+          <span class="text-sm">Mar 12, 2024</span>
+        </div>
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          <a href="#">How to quickly deploy a static website</a>
+        </h2>
+        <p class="mb-5 font-light text-gray-500">
+          Static websites are now used to bootstrap lots of websites and are becoming the basis for a variety of tools that even
+          influence...
+        </p>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <img
+              class="w-7 h-7 rounded-full"
+              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+              alt="Jese Leos avatar"
+            />
+            <span class="font-medium"> Jese Leos </span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

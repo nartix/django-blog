@@ -1,0 +1,97 @@
+<!-- Login Section -->
+<section class="container mx-auto max-w-md">
+  <div class="mx-2 bg-white/75 rounded-lg shadow-md p-8 mt-10 mb-10">
+    <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Sign Up</h2>
+    <form
+      x-ref="form"
+      hx-trigger="submit-form"
+      id="signup-form"
+      hx-boost="false"
+      hx-target="#main-section"
+      hx-post="true"
+      action="/signup"
+      method="post"
+      class="space-y-6"
+      x-data="formValidator({
+        email: [
+          { required: true, message: 'Email is required.' },
+          { email: true, message: 'Please enter a valid email address.' }
+        ],
+        username: [
+          { required: true, message: 'Username is required.' },
+          { maxLength: 2, message: 'Username must be at least {0} characters.' }
+        ],
+        password: [
+          { required: true, message: 'Password is required.' },
+          { maxLength: 2,  message: 'Password must be at least {0} characters.' } 
+        ],
+        confirmPassword: [
+          { required: true, message: 'Confirm Password is required.' },
+          { equalTo: 'password', message: 'Password and Confirm Password must match.' }
+        ]
+    })"
+      @submit.prevent="validateForm()"
+    >
+      <div class="flex flex-col">
+        <label for="email" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Email:</label>
+        <input
+          x-model="formData.email"
+          id="email"
+          name="email"
+          type="text"
+          placeholder="Email"
+          class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-teal-500 focus:outline-none py-2 px-4"
+          :class="{'border-red-500 focus:border-red-500': errors.email}"
+        />
+        <span class="text-red-500 text-xs mt-1" x-show="errors.email" x-text="errors.email"></span>
+      </div>
+      <div class="flex flex-col">
+        <label for="username" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Username:</label>
+        <input
+          x-model="formData.username"
+          id="username"
+          name="username"
+          type="text"
+          placeholder="Username"
+          class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-teal-500 focus:outline-none py-2 px-4"
+          :class="{'border-red-500 focus:border-red-500': errors.username}"
+        />
+        <span class="text-red-500 text-xs mt-1" x-show="errors.username" x-text="errors.username"></span>
+      </div>
+      <div class="flex flex-col">
+        <label for="password" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Password:</label>
+        <input
+          x-model="formData.password"
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Password"
+          class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-teal-500 focus:outline-none py-2 px-4"
+          :class="{'border-red-500 focus:border-red-500': errors.password}"
+        />
+        <span class="text-red-500 text-xs mt-1" x-show="errors.password" x-text="errors.password"></span>
+      </div>
+      <div class="flex flex-col">
+        <label for="confirm-password" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Confirm Password:</label>
+        <input
+          x-model="formData.confirmPassword"
+          id="confirm-password"
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirm Password"
+          class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-teal-500 focus:outline-none py-2 px-4"
+          :class="{'border-red-500 focus:border-red-500': errors.confirmPassword}"
+        />
+        <span class="text-red-500 text-xs mt-1" x-show="errors.confirmPassword" x-text="errors.confirmPassword"></span>
+      </div>
+      <div class="mt-4">
+        <button
+          type="submit"
+          class="w-full py-2 rounded bg-opacity-80 bg-teal-500 hover:bg-teal-600 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50"
+        >
+          Sign Up
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

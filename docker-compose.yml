@@ -1,0 +1,35 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: django
+    volumes:
+      - ./:/home/feroz/app
+    ports:
+      - '8000:8000'
+    restart: unless-stopped
+    environment:
+      - DJANGO_DEBUG=True
+      # {{ with secret "kv/data/django_token" }}
+      - VAULT_ADDR={{ .Data.data.VAULT_ADDR }}
+      - VAULT_TOKEN={{ .Data.data.VAULT_TOKEN }}
+      # {{ end }}
+
+  vitejs:
+    image: node:21-alpine3.18
+    container_name: vitejs
+    working_dir: /app
+    command:
+      - /bin/sh
+      - -c
+      - |
+        cd portfolio
+        npm run dev
+    user: '1000:1000'
+    volumes:
+      - /app/node_modules
+      - ./vitejs:/app
+    ports:
+      - '3300:3000'
+    restart: unless-stopped

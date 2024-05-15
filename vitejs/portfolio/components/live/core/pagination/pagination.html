@@ -1,0 +1,134 @@
+<nav aria-label="Page navigation">
+  <ul class="list-style-none flex justify-center">
+    <li class="hidden md:block relative" x-data="{ lgPaginationMenu : false }">
+      <a
+        :class="{ 'bg-neutral-300': lgPaginationMenu }"
+        @click.prevent="lgPaginationMenu = !lgPaginationMenu"
+        x-ref="lgPaginationMenu"
+        href="#"
+        class="relative block rounded bg-transparent mx-px pl-2 pr-6 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-300"
+      >
+        <i class="absolute top-[7px] right-2 fa-solid fa-sort-down"></i>
+      </a>
+      <!-- Desktop dropdown -->
+      <form
+        x-show="lgPaginationMenu"
+        @click.away="lgPaginationMenu = false"
+        class="mt-2 p-2 w-max border border-gray-300 bg-white shadow-lg rounded-md flex justify-center items-center z-40"
+        tabindex="0"
+        style="display: none"
+        x-anchor="$refs.lgPaginationMenu"
+        hx-swap="show:top"
+        method="get"
+        action=""
+      >
+        <label for="page-input" class="text-center pr-2 text-sm font-medium text-gray-700 text-nowrap"> : </label>
+        <input
+          id="page-input"
+          name="page"
+          type="number"
+          min="1"
+          max=""
+          placeholder=""
+          class="text-sm relative border-gray-300 border rounded-l-md placeholder-gray-400 focus:border-teal-500 focus:outline-none p-1.5 w-16"
+        />
+        <div class="text-sm p-1.5 text-gray-500 bg-gray-200 rounded-r-md text-nowrap border-gray-300 border-y border-r">/</div>
+        <button
+          type="submit"
+          class="ml-2 inline-flex justify-center p-1.5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-nowrap"
+        ></button>
+      </form>
+    </li>
+
+    <li>
+      <a
+        href="?page=1"
+        hx-swap="show:top"
+        class="block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-300"
+      >
+        <i class="fa-solid fa-caret-left inline md:hidden"></i><i class="fa-solid fa-caret-left inline md:hidden"></i>
+        <span class="hidden md:block"></span>
+      </a>
+    </li>
+    <li>
+      <a
+        href="?page="
+        hx-swap="show:top"
+        class="block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-300"
+      ></a>
+    </li>
+
+    <!-- Hide individual page numbers on small screens -->
+
+    <li class="hidden md:block" aria-current="page">
+      <a
+        hx-swap="show:top"
+        class="relative block rounded bg-gray-300 hover:bg-neutral-300 mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300"
+        href="?page="
+      ></a>
+    </li>
+
+    <!-- Display "Page 4 of 50" on small screens -->
+    <li
+      class="md:hidden relative"
+      x-data="{ smPaginationMenu : false }"
+      :class="{ 'block ': smPaginationMenu, 'md:hidden ': !smPaginationMenu}"
+    >
+      <a
+        @click.prevent="smPaginationMenu = !smPaginationMenu"
+        href="#"
+        x-ref="smPaginationMenu"
+        :class="{  'md:hidden bg-neutral-300': smPaginationMenu }"
+        class="relative block rounded bg-transparent bg-gray-300 mx-px pl-3 pr-6 py-1.5 text-sm text-neutral-600 hover:bg-neutral-300 transition-all duration-300"
+      >
+        <i class="absolute top-[7px] right-2 fa-solid fa-sort-down"></i
+      ></a>
+      <!-- Mobile dropdown -->
+      <form
+        x-show="smPaginationMenu"
+        x-anchor="$refs.smPaginationMenu"
+        @click.away="smPaginationMenu = false"
+        class="absolute mt-2 p-2 w-max border border-gray-300 bg-white shadow-lg rounded-md flex justify-center items-center"
+        tabindex="0"
+        style="display: none"
+        method="get"
+        hx-swap="show:body:top"
+        action=""
+      >
+        <label for="page-input" class="text-center pr-2 text-sm font-medium text-gray-700 text-nowrap"> : </label>
+        <input
+          id="page-input"
+          name="page"
+          type="number"
+          min="1"
+          max=""
+          placeholder=""
+          class="text-sm relative border-gray-300 border rounded-l-md placeholder-gray-400 focus:border-teal-500 focus:outline-none p-1.5 w-16"
+        />
+        <div class="text-sm p-1.5 text-gray-500 bg-gray-200 rounded-r-md text-nowrap border-gray-300 border-y border-r">/</div>
+        <button
+          type="submit"
+          class="ml-2 inline-flex justify-center p-1.5 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-700 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-nowrap"
+        ></button>
+      </form>
+    </li>
+
+    <li>
+      <a
+        hx-swap="show:top"
+        class="block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-300"
+        href="?page="
+      ></a>
+    </li>
+    <li>
+      <a
+        hx-swap="show:top"
+        href="?page="
+        class="block rounded bg-transparent mx-px px-3 py-1.5 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-300"
+      >
+        <span class="hidden md:block"></span>
+        <i class="fa-solid fa-caret-right visible md:hidden"></i><i class="fa-solid fa-caret-right visible md:hidden"></i>
+      </a>
+    </li>
+  </ul>
+</nav>

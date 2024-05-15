@@ -1,0 +1,26 @@
+<title></title>
+
+<section id="signup-email-validation-sent-page" class="flex flex-col flex-grow items-center justify-center">
+  <div class="container max-w-screen-lg py-10 text-center mx-2">
+    <div class="bg-white/75 shadow-xl rounded-lg p-8 md:p-12 lg:p-16 mx-2">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4"></h2>
+      <p class="text-xl font-semibold text-gray-800 mb-5"></p>
+      <p class="text-gray-600 mb-6">
+        Please check your email and click on the link to verify your email address. If you have not received the email, check your
+        spam folder or you can request to resend the validation email.
+      </p>
+      <span id="resend-email-validation-link">
+        <a
+          href=""
+          hx-post=""
+          hx-target="#resend-email-validation-link"
+          hx-vals='{"csrfmiddlewaretoken": ""}'
+          class="inline-block bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-700 transition-colors"
+        ></a>
+      </span>
+      <div class="mt-6">
+        <a href="" class="text-blue-500 hover:underline"></a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+
+
+Hi ,
+
+You're receiving this email because you have created a new account at .
+
+Please go to the following link to verify your email address and activate your account:
+
+://?id=&token=
+
+
+Your username, in case you've forgotten: 
+
+If you did not create this account, please ignore this email. 
+
+Thank you for joining us.
+
+Best regards,
+

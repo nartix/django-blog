@@ -1,0 +1,43 @@
+FROM python:3.12-bookworm
+
+# Create a new user 'feroz' with user ID 1000
+RUN useradd -m -u 1000 feroz
+
+# Set the working directory
+WORKDIR /home/feroz
+
+USER feroz
+
+# Set up a Python virtual environment for the user
+# This allows 'feroz' to install packages without needing root privileges
+RUN python -m venv venv
+ENV PATH="/home/feroz/venv/bin:$PATH"
+
+RUN pip install --upgrade pip
+
+# Copy the requirements.txt file
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Download and install EnvConsul
+USER root
+ENV ENVCONSUL_VERSION 0.13.2
+RUN apt-get update && apt-get install -y wget unzip \
+    && wget https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip \
+    && unzip envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin \
+    && chmod +x /usr/local/bin/envconsul \
+    && rm -rf envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip \
+    && apt-get clean
+
+COPY update_cert.sh start_app.sh .
+RUN chmod +x update_cert.sh start_app.sh
+
+USER feroz
+
+EXPOSE 8000
+
+# Run the Django development server
+# CMD ["sh", "-c", "envconsul -config=app/envconsul-config.hcl -- python app/ferozfaiz/manage.py runserver 0.0.0.0:8000"]
+CMD ["envconsul", "-config=app/envconsul-config.hcl", "--", "./start_app.sh"]

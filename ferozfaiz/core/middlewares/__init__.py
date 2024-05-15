@@ -1,0 +1,2 @@
+from core.middlewares.session_middleware import SessionMiddleware
+from core.middlewares.timezone_middleware import TimezoneMiddleware

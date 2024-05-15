@@ -1,0 +1,197 @@
+<div x-data="editor('')">
+  <div x-show="isLoaded()" class="relative">
+    <div
+      class="sticky top-0 z-40 bg-[#e2e8ea] mb-1 text-gray-600 flex flex-wrap items-center justify-items-start"
+      x-data="{ open: false, openTextAlign: false,  align: 'left' }"
+      @click.away="open = false; openTextAlign: false"
+    >
+      <button type="button" class="hover:bg-gray-300 px-2 py-1 mr-1 rounded" @click="undo()" title="Undo">
+        <i class="fas fa-undo-alt"></i>
+      </button>
+      <button type="button" class="hover:bg-gray-300 px-2 py-1 mr-1 rounded" @click="redo()" title="Redo">
+        <i class="fas fa-redo-alt"></i>
+      </button>
+      <div class="border-r border-gray-400 py-1 mx-2 h-6 inline-block"></div>
+      <button
+        x-ref="headingDropdown"
+        @click.away="open = false"
+        type="button"
+        class="hover:bg-gray-300 px-2 py-2 mr-1 rounded flex items-center"
+        @click="open = ! open"
+        :class="{ 'bg-gray-300': isActive('heading', { level: 1 }, updatedAt) }"
+        title="Toggle headings"
+      >
+        <i class="fas fa-heading"></i><i class="fas fa-angle-down fa-xs ml-2"></i>
+      </button>
+      <ul
+        class="z-50 bg-white shadow-md rounded-md border border-gray-400 p-1"
+        x-show="open"
+        @click="open = false"
+        x-anchor="$refs.headingDropdown"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="transform opacity-0 scale-95"
+        x-transition:enter-end="transform opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="transform opacity-100 scale-100"
+        x-transition:leave-end="transform opacity-0 scale-95"
+      >
+        <li
+          class="h1-ref p-1 cursor-pointer hover:bg-gray-200"
+          @click="toggleHeading({ level: 1 })"
+          :class="{ 'bg-gray-300' : isActive('heading', { level: 1 }, updatedAt) }"
+        >
+          Heading 1
+        </li>
+        <li
+          class="h2-ref p-1 cursor-pointer hover:bg-gray-200"
+          @click="toggleHeading({ level: 2 })"
+          :class="{ 'bg-gray-300' : isActive('heading', { level: 2 }, updatedAt) }"
+        >
+          Heading 2
+        </li>
+        <li
+          class="h3-ref p-1 cursor-pointer hover:bg-gray-200"
+          @click="toggleHeading({ level: 3 })"
+          :class="{ 'bg-gray-300' : isActive('heading', { level: 3 }, updatedAt) }"
+        >
+          Heading 3
+        </li>
+        <li
+          class="h4-ref p-1 cursor-pointer hover:bg-gray-200"
+          @click="toggleHeading({ level: 4 })"
+          :class="{ 'bg-gray-300' : isActive('heading', { level: 4 }, updatedAt) }"
+        >
+          Heading 4
+        </li>
+        <li
+          class="h5-ref p-1 cursor-pointer hover:bg-gray-200"
+          @click="toggleHeading({ level: 5 })"
+          :class="{ 'bg-gray-300' : isActive('heading', { level: 5 }, updatedAt) }"
+        >
+          Heading 5
+        </li>
+        <li
+          class="mb-0 h6-ref p-1 cursor-pointer hover:bg-gray-200"
+          @click="toggleHeading({ level: 6 })"
+          :class="{ 'bg-gray-300' : isActive('heading', { level: 6 }, updatedAt) }"
+        >
+          Heading 6
+        </li>
+      </ul>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+        @click="toggleBold()"
+        :class="{ 'bg-gray-300' : isActive('bold', updatedAt) }"
+        title="Toggle bold text"
+      >
+        <i class="fas fa-bold"></i>
+      </button>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+        @click="toggleItalic()"
+        :class="{ 'bg-gray-300' : isActive('italic', updatedAt) }"
+        title="Toggle italic text"
+      >
+        <i class="fas fa-italic"></i>
+      </button>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+        @click="toggleBlockquote()"
+        :class="{ 'bg-gray-300' : isActive('blockquote', updatedAt) }"
+        title="Toggle blockquote"
+      >
+        <i class="fas fa-quote-right"></i>
+      </button>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+        @click="toggleCode()"
+        :class="{ 'bg-gray-300' : isActive('code', updatedAt) }"
+        title="Toggle inline code"
+      >
+        <i class="fas fa-code"></i>
+      </button>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+        @click="toggleCodeBlock()"
+        :class="{ 'bg-gray-300' : isActive('codeBlock', updatedAt) }"
+        title="Toggle code block"
+      >
+        <i class="fas fa-file-code"></i>
+      </button>
+      <button type="button" class="hover:bg-gray-300 px-2 py-1 rounded" @click="setLink(prompt('Enter URL:'))" title="Add a link">
+        <i class="fas fa-link"></i>
+      </button>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 rounded"
+        @click="setImage(prompt('Enter URL:'))"
+        title="Add an Image"
+      >
+        <i class="fas fa-image"></i>
+      </button>
+      <div class="border-r border-gray-400 py-1 mx-2 h-6 inline-block"></div>
+      <button
+        x-ref="textAlignDropdown"
+        @click.away="openTextAlign = false"
+        type="button"
+        @click="openTextAlign = ! openTextAlign"
+        class="hover:bg-gray-300 px-2 py-2 mr-1 rounded flex items-center"
+        title="Align text left"
+      >
+        <i
+          class="fas"
+          :class="{ 'fa-align-left': align === 'left', 'fa-align-center': align === 'center', 'fa-align-right': align === 'right', 'fa-align-justify': align === 'justify' }"
+        ></i
+        ><i class="fas fa-angle-down fa-xs ml-2"></i>
+      </button>
+      <!-- Text alignment dropdown -->
+      <ul
+        class="z-50 bg-white shadow-md rounded-md border border-gray-400 p-1"
+        x-show="openTextAlign"
+        @click="openTextAlign = false"
+        x-anchor="$refs.textAlignDropdown"
+        x-transition
+      >
+        <li class="hover:bg-gray-300 px-3 py-1" @click="setTextAlign('left'); align = 'left'" title="Align text left">
+          <i class="fas fa-align-left"></i>
+        </li>
+        <li class="hover:bg-gray-300 px-3 py-1" @click="setTextAlign('center'); align = 'center'" title="Align text center">
+          <i class="fas fa-align-center"></i>
+        </li>
+        <li class="hover:bg-gray-300 px-3 py-1" @click="setTextAlign('right'); align = 'right'" title="Align text right">
+          <i class="fas fa-align-right"></i>
+        </li>
+        <li class="hover:bg-gray-300 px-3 py-1" @click="setTextAlign('justify'); align = 'justify'" title="Justify text">
+          <i class="fas fa-align-justify"></i>
+        </li>
+      </ul>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+        @click="toggleBulletList()"
+        :class="{ 'bg-gray-300' : isActive('bulletList', updatedAt) }"
+        title="Toggle bullet list"
+      >
+        <i class="fas fa-list-ul"></i>
+      </button>
+      <button
+        type="button"
+        class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+        @click="toggleOrderedList()"
+        :class="{ 'bg-gray-300' : isActive('orderedList', updatedAt) }"
+        title="Toggle ordered list"
+      >
+        <i class="fas fa-list-ol"></i>
+      </button>
+    </div>
+    <div>
+      <input type="hidden" id="editorContent" name="content" value="" />
+      <div x-ref="elementEditor" class="editor" id="content"></div>
+    </div>
+  </div>
+</div>

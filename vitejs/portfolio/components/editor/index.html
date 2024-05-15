@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body x-data="{ menuOpen: false }" x-bind:class="{ 'overflow-hidden': menuOpen }" hx-boost="true" hx-target="#main-section">
+    <script type="module" src="/main.js"></script>
+    <div class="flex flex-col relative">
+      <img
+        src="https://images.unsplash.com/photo-1596367407372-96cb88503db6?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Background Image"
+        class="absolute h-full w-full object-cover inset-0"
+      />
+      <div class="z-10 flex flex-col min-h-screen justify-between">
+        <!-- Header bg-opacity-20 bg-gray-400 -->
+        <header class="p-3">
+          <nav class="container mx-auto max-w-screen-lg flex justify-between items-center">
+            <div class="font-extrabold text-2xl text-gray-900 text-opacity-80">
+              <a href="/"> ferozfaiz.com </a>
+            </div>
+
+            <!-- Desktop menu -->
+            <div class="hidden md:flex flex-grow justify-center items-center text-gray-900 text-opacity-75">
+              <a
+                href="/components/test.html"
+                hx-replace-url="true"
+                class="px-4 hover:text-gray-500"
+                hx-get="/components/test.html"
+                hx-target="#main-section"
+                >Blog</a
+              >
+              <a
+                href="/components/projects.html"
+                hx-get="/components/projects.html"
+                hx-target="#main-section"
+                hx-replace-url="true"
+                class="px-4 hover:text-gray-500"
+                >Projects</a
+              >
+              <a href="#crud" class="px-4 hover:text-gray-500">About</a>
+              <a href="#crud" class="px-4 hover:text-gray-500">Resume</a>
+            </div>
+
+            <!-- Login button -->
+            <div class="md:ml-0 ml-auto">
+              <a
+                href="/components/login.html"
+                hx-get="/components/login.html"
+                hx-replace-url="true"
+                hx-target="#main-section"
+                class="border-[1px] border-gray-400 border-opacity-40 px-3 py-1 bg-[#a8c3c7] bg-opacity-20 hover:bg-opacity-70 text-gray-800 text-opacity-75 font-bold rounded"
+              >
+                Login
+              </a>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden mr-1 ml-5">
+              <button
+                class="text-gray-900 text-opacity-80 hover:text-opacity-100 focus:outline-none relative"
+                x-ref="menuButton"
+                @click="menuOpen = ! menuOpen"
+              >
+                <!-- Bars Icon -->
+                <i
+                  class="fas fa-bars fa-lg transition-all duration-300"
+                  :class="{ 'transform rotate-180 opacity-0': menuOpen }"
+                ></i>
+                <!-- Times Icon -->
+                <i
+                  class="fas fa-times fa-xl transition-all duration-300 absolute top-[11px] left-0"
+                  :class="{ 'transform rotate-180 opacity-100': menuOpen, 'opacity-0': !menuOpen }"
+                ></i>
+              </button>
+            </div>
+
+            <!-- Mobile menu -->
+            <div
+              class="fixed top-[54px] left-0 w-full h-screen bg-[#cfd6da] z-50 text-center border-t border-gray-500 border-opacity-25"
+              x-show="menuOpen"
+              x-anchor="$refs.menuButton"
+              x-cloak
+              x-transition.duration.300ms
+            >
+              <a
+                href="#blog"
+                hx-get="/components/indexMainSection.html"
+                hx-target="#main-section"
+                class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80"
+                @click="menuOpen = false"
+                >Blog</a
+              >
+              <a
+                href="/"
+                hx-get="/components/indexMainSection2.html"
+                hx-target="#main-section"
+                @click="menuOpen = false"
+                class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80"
+                >About</a
+              >
+              <a href="#crud" @click="menuOpen = false" class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80"
+                >Projects</a
+              >
+            </div>
+          </nav>
+        </header>
+
+        <!-- Main section -->
+        <main class="flex-1 flex flex-col" id="main-section">
+          <section class="flex-1 bg-white/60">
+            <div class="container max-w-screen-sm mx-auto py-10 flex-1 px-2">
+              <h2 class="text-center text-3xl font-semibold mb-6">Create Blog Post</h2>
+              <form method="post" hx-swap="show:body:top">
+                <div class="flex flex-col mb-4">
+                  <label for="title" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Title:</label>
+                  <div class="relative">
+                    <input
+                      id="title"
+                      name="title"
+                      type="text"
+                      placeholder="Title"
+                      class="text-sm sm:text-base relative w-full border border-gray-300 focus:border-teal-500 rounded placeholder-gray-400 focus:outline-none py-2 px-4"
+                      value=""
+                      spellcheck="false"
+                      data-ms-editor="true"
+                    />
+                  </div>
+                </div>
+
+                <div class="flex flex-col mb-4">
+                  <label for="content" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Content:</label>
+                  <div class="relative">
+                    <div
+                      x-data='editor("<p>Testing <code class=\"hljs\">console.log(\"sdflj\");</code> javascript code</p><pre class=\"hljs\"><code>print(f\"hello world\")</code></pre><p>test</p><p><code class=\"hljs\">console.log(\"test\", test);</code></p><p>jljkf</p><pre class=\"hljs\"><code>print(\"hello world\")</code></pre><p>The above code is python</p><pre class=\"hljs\"><code>sudo apt update &amp;&amp; sudo apt upgrade -y</code></pre>")'
+                    >
+                      <template x-if="isLoaded()" class="relative">
+                        <div
+                          class="sticky top-0 z-40 bg-[#e2e8ea] mb-1 text-gray-600 flex flex-wrap items-center justify-items-start"
+                          x-data="{ open: false, openTextAlign: false,  align: 'left' }"
+                          @click.away="open = false; openTextAlign: false"
+                        >
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="undo()"
+                            title="Undo"
+                            :disabled="!canUndo"
+                            :class="{'opacity-50 cursor-not-allowed': !canUndo}"
+                          >
+                            <i class="fas fa-undo-alt"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="redo()"
+                            title="Redo"
+                            :disabled="!canRedo"
+                            :class="{'opacity-50 cursor-not-allowed': !canRedo}"
+                          >
+                            <i class="fas fa-redo-alt"></i>
+                          </button>
+                          <div class="border-r border-gray-400 py-1 mx-2 h-6 inline-block"></div>
+                          <button
+                            x-ref="headingDropdown"
+                            @click.away="open = false"
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded flex items-center"
+                            @click="open = ! open"
+                            :class="{ 'bg-gray-300': isActive('heading', { level: 1 }, updatedAt) }"
+                            title="Toggle headings"
+                          >
+                            <i class="fas fa-heading"></i><i class="fas fa-angle-down fa-xs ml-2"></i>
+                          </button>
+                          <ul
+                            class="z-50 bg-white shadow-md rounded-md border border-gray-400 p-1"
+                            x-show="open"
+                            @click="open = false"
+                            x-anchor="$refs.headingDropdown"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-200"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                          >
+                            <li
+                              class="h1-ref p-1 cursor-pointer hover:bg-gray-200"
+                              @click="toggleHeading({ level: 1 })"
+                              :class="{ 'bg-gray-300' : isActive('heading', { level: 1 }, updatedAt) }"
+                            >
+                              Heading 1
+                            </li>
+                            <li
+                              class="h2-ref p-1 cursor-pointer hover:bg-gray-200"
+                              @click="toggleHeading({ level: 2 })"
+                              :class="{ 'bg-gray-300' : isActive('heading', { level: 2 }, updatedAt) }"
+                            >
+                              Heading 2
+                            </li>
+                            <li
+                              class="h3-ref p-1 cursor-pointer hover:bg-gray-200"
+                              @click="toggleHeading({ level: 3 })"
+                              :class="{ 'bg-gray-300' : isActive('heading', { level: 3 }, updatedAt) }"
+                            >
+                              Heading 3
+                            </li>
+                            <li
+                              class="h4-ref p-1 cursor-pointer hover:bg-gray-200"
+                              @click="toggleHeading({ level: 4 })"
+                              :class="{ 'bg-gray-300' : isActive('heading', { level: 4 }, updatedAt) }"
+                            >
+                              Heading 4
+                            </li>
+                            <li
+                              class="h5-ref p-1 cursor-pointer hover:bg-gray-200"
+                              @click="toggleHeading({ level: 5 })"
+                              :class="{ 'bg-gray-300' : isActive('heading', { level: 5 }, updatedAt) }"
+                            >
+                              Heading 5
+                            </li>
+                            <li
+                              class="mb-0 h6-ref p-1 cursor-pointer hover:bg-gray-200"
+                              @click="toggleHeading({ level: 6 })"
+                              :class="{ 'bg-gray-300' : isActive('heading', { level: 6 }, updatedAt) }"
+                            >
+                              Heading 6
+                            </li>
+                          </ul>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="toggleBold()"
+                            :class="{ 'bg-gray-300' : isActive('bold', updatedAt) }"
+                            title="Toggle bold text"
+                          >
+                            <i class="fas fa-bold"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="toggleItalic()"
+                            :class="{ 'bg-gray-300' : isActive('italic', updatedAt) }"
+                            title="Toggle italic text"
+                          >
+                            <i class="fas fa-italic"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="toggleBlockquote()"
+                            :class="{ 'bg-gray-300' : isActive('blockquote', updatedAt) }"
+                            title="Toggle blockquote"
+                          >
+                            <i class="fas fa-quote-right"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="toggleCode()"
+                            :class="{ 'bg-gray-300' : isActive('code', updatedAt) }"
+                            title="Toggle inline code"
+                          >
+                            <i class="fas fa-code"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="toggleCodeBlock()"
+                            :class="{ 'bg-gray-300' : isActive('codeBlock', updatedAt) }"
+                            title="Toggle code block"
+                          >
+                            <i class="fas fa-file-code"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 rounded"
+                            @click="setLink(prompt('Enter URL:'))"
+                            title="Add a link"
+                          >
+                            <i class="fas fa-link"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 rounded"
+                            @click="setImage(prompt('Enter URL:'))"
+                            title="Add an Image"
+                          >
+                            <i class="fas fa-image"></i>
+                          </button>
+                          <div class="border-r border-gray-400 py-1 mx-2 h-6 inline-block"></div>
+                          <button
+                            x-ref="textAlignDropdown"
+                            @click.away="openTextAlign = false"
+                            type="button"
+                            @click="openTextAlign = ! openTextAlign"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded flex items-center"
+                            title="Align text left"
+                          >
+                            <i
+                              class="fas"
+                              :class="{ 'fa-align-left': align === 'left', 'fa-align-center': align === 'center', 'fa-align-right': align === 'right', 'fa-align-justify': align === 'justify' }"
+                            ></i
+                            ><i class="fas fa-angle-down fa-xs ml-2"></i>
+                          </button>
+                          <!-- Text alignment dropdown -->
+                          <ul
+                            class="z-50 bg-white shadow-md rounded-md border border-gray-400 p-1"
+                            x-show="openTextAlign"
+                            @click="openTextAlign = false"
+                            x-anchor="$refs.textAlignDropdown"
+                            x-transition=""
+                          >
+                            <li
+                              class="hover:bg-gray-300 px-3 py-1"
+                              @click="setTextAlign('left'); align = 'left'"
+                              title="Align text left"
+                            >
+                              <i class="fas fa-align-left"></i>
+                            </li>
+                            <li
+                              class="hover:bg-gray-300 px-3 py-1"
+                              @click="setTextAlign('center'); align = 'center'"
+                              title="Align text center"
+                            >
+                              <i class="fas fa-align-center"></i>
+                            </li>
+                            <li
+                              class="hover:bg-gray-300 px-3 py-1"
+                              @click="setTextAlign('right'); align = 'right'"
+                              title="Align text right"
+                            >
+                              <i class="fas fa-align-right"></i>
+                            </li>
+                            <li
+                              class="hover:bg-gray-300 px-3 py-1"
+                              @click="setTextAlign('justify'); align = 'justify'"
+                              title="Justify text"
+                            >
+                              <i class="fas fa-align-justify"></i>
+                            </li>
+                          </ul>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="toggleBulletList()"
+                            :class="{ 'bg-gray-300' : isActive('bulletList', updatedAt) }"
+                            title="Toggle bullet list"
+                          >
+                            <i class="fas fa-list-ul"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 mr-1 rounded"
+                            @click="toggleOrderedList()"
+                            :class="{ 'bg-gray-300' : isActive('orderedList', updatedAt) }"
+                            title="Toggle ordered list"
+                          >
+                            <i class="fas fa-list-ol"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="hover:bg-gray-300 px-2 py-1 rounded"
+                            @click="transformInlineCode(); setChar(prompt('Enter Char:'))"
+                            title="Add a Char"
+                          >
+                            <i class="fas fa-image"></i>
+                          </button>
+                        </div>
+                      </template>
+
+                      <input type="hidden" id="editorContent" name="content" value="" />
+                      <div>
+                        <div x-ref="elementEditor" class="editor" id="content"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button
+                    type="submit"
+                    class="text-white py-2 px-4 rounded bg-opacity-80 bg-teal-600 hover:bg-teal-600 focus:ring-teal-700 focus:outline-none focus:ring-2"
+                  >
+                    Submit Post
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+          <!--  <section class="container mx-auto max-w-screen-lg"></section> -->
+        </main>
+
+        <!-- Footer -->
+        <footer class="p-3">
+          <section class="container mx-auto max-w-screen-lg flex justify-between items-center">
+            <p class="text-gray-500">&copy;2024 Feroz Faiz</p>
+            <div class="flex space-x-5">
+              <a
+                href="https://www.linkedin.com/in/your-linkedin"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fab fa-linkedin fa-lg"></i>
+              </a>
+              <a
+                href="mailto:your-email@example.com"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fas fa-envelope fa-lg"></i>
+              </a>
+              <a
+                href="your-resume-link.pdf"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fas fa-file-alt fa-lg"></i>
+              </a>
+              <a
+                href="https://github.com/your-github"
+                class="text-gray-600 text-lg hover:text-teal-600 hover:scale-125 transition duration-300"
+              >
+                <i class="fab fa-github fa-lg"></i>
+              </a>
+            </div>
+          </section>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

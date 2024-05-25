@@ -52,7 +52,7 @@ def handler401(request):
     # send_email_task.delay(
     #     'Testing Celery',
     #     'Here is the message.',
-    #     ['nartix@gmail.com']  # List of recipient email addresses
+    #     ['email@email.com']  # List of recipient email addresses
     # )
 
     # send_task_to_dynamic_broker('core.tasks.hello_world')

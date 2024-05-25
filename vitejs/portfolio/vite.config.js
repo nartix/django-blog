@@ -8,6 +8,12 @@ dns.setDefaultResultOrder('verbatim');
 function getHtmlEntries(startPath) {
   let entries = {};
 
+  // Check if directory exists
+  if (!fs.existsSync(startPath)) {
+    console.error(`Directory ${startPath} does not exist.`);
+    return entries;
+  }
+
   // Read all files in the directory
   const files = fs.readdirSync(startPath);
 

@@ -15,6 +15,17 @@
     </title>
     <script type="module" crossorigin src="{% static 'js/index.js' %}"></script>
     <link rel="stylesheet" crossorigin href="{% static 'css/index.css' %}" />
+    {% if not debug %}
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-HDKQJH7SPK"></script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HDKQJH7SPK');
+      </script>
+    {% endif %}
     {% if debug %}
       <script src="https://cdn.tailwindcss.com">   </script>
       <script>
@@ -83,12 +94,12 @@
               <a href="{% url 'blogs:blog_list' %}"
                  class="block px-4 py-2 pt-8 hover:text-gray-500 text-gray-900 text-opacity-80"
                  @click="menuOpen = false">{% trans "Blog" %}</a>
-              <a href="{% url 'blogs:blog_detail' 31 'about' %}"
-                 @click="menuOpen = false"
-                 class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "About" %}</a>
               <a href="{% url 'core:projects' %}"
                  @click="menuOpen = false"
                  class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Projects" %}</a>
+              <a href="{% url 'blogs:blog_detail' 31 'about' %}"
+                 @click="menuOpen = false"
+                 class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "About" %}</a>
               <a href="{% static "files/feroz-resume-v2.pdf" %}" target="_blank" hx-boost="false" @click="menuOpen = false" class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Resume" %} </a>
             </div>
           </nav>

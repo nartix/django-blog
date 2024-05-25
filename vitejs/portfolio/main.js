@@ -61,22 +61,24 @@ if (typeof window.htmx !== 'undefined') {
 // Progress bar handler
 const progressBarHandler = new ProgressBar('progressBar');
 
-let fragmentRequest;
+let fragmentRequest = false;
 function isFragmentRequest(event) {
   // Use event.detail.elt.hasAttribute('data-fragment-request') to check the element
   // that triggered the htmx request. This ensures accuracy even if the event target is different.
-
   // In htmx, `event.detail.elt` references the HTML element that initiated the htmx request.
-  fragmentRequest = event.detail.elt.dataset.fragmentRequest;
-  return fragmentRequest ? true : false;
+  // fragmentRequest = event.detail.elt.dataset.fragmentRequest;
+  fragmentRequest = event.detail.elt && event.detail.elt.hasAttribute('data-fragment-request');
+  return fragmentRequest;
 }
+
 document.body.addEventListener('htmx:beforeRequest', (event) => {
   if (!isFragmentRequest(event)) {
     progressBarHandler.startOrAdvance(30, 2);
   }
 });
 document.body.addEventListener('htmx:afterOnLoad', (event) => {
-  if (!isFragmentRequest(event)) {
+  // Cannot use isFragmentRequest(e) here because as the dom is already updated with the new content
+  if (!fragmentRequest) {
     progressBarHandler.startOrAdvance(100, 1, 3);
   }
 });

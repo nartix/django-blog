@@ -46,12 +46,11 @@ from users.forms import (
     UsernameForm,
     ProfileEmailEditForm,
 )
-from core.mixins import CoreMixin
 from users.mixins import UnauthenticatedUserMixin, ResetTokenValidationMixin
-from core.tasks import send_email_task
-from users.models import UnverifiedUser
 from users.utils import create_signed_user_token, UserAuthManager
-from core.utils import Tokenizer, encode_base64_key, decode_base64_key
+from core.tasks import send_email_task
+from core.mixins import CoreMixin
+from core.utils import Tokenizer, encode_base64_key, decode_base64_key, redirect_with_message
 
 User = get_user_model()
 
@@ -203,79 +202,6 @@ class RegisterEmailValidationSentView(CoreMixin, TemplateView):
     title = _("Email Validation Sent")
 
 
-def signup_verify_email2(request):
-    token = request.GET.get("token")
-    id = request.GET.get("id")
-
-    try:
-        pk = decode_base64_key(id)
-        user = UserAuthManager.get_unverified_user_by_pk(pk)
-        # Attempt to unsign the token within 3 days
-        token_user = Tokenizer().decode(user.pk, user.username, user.email, user.password, user.date_joined,
-                                        token=token, max_age=settings.PASSWORD_RESET_TIMEOUT
-                                        )
-
-        # For scenario where user registers the same email using OAuth
-        # before verifying the email
-        if (UserAuthManager.do_email_pk_exist(
-                    user.pk, user.email)
-                ):
-            messages.error(request, _(
-                "Email already registered. Please login."))
-            return redirect("users:login")
-
-        # The token is valid, and proceed with activating the user account
-        unverified_user = user
-        if unverified_user:
-            # For scenario where username gets taken while user is verifying email
-            # Check if username already exists in User model
-            username = unverified_user.username
-            count = 1
-            while UserAuthManager.does_username_exist(username):
-                # Append a number to the end of the username
-                username = f"{unverified_user.username}{count}"
-                count += 1
-
-            UserAuthManager.create_user(
-                username=username,
-                email=unverified_user.email,
-                password=unverified_user.password,
-                email_verified=True,
-                username_editable=True if count > 1 else False
-            )
-
-            logger.info(
-                f"User created with username: {username} after email verification."
-            )
-
-            # Delete the unverified user
-            unverified_user.delete()
-
-            messages.success(
-                request, _("Your email has been verified. You can now login.")
-            )
-            return redirect("users:login")
-        else:
-            # Handle the case where the email does not exist in the UnverifiedUser model
-            messages.error(
-                request, _("Invalid or expired token. Please sign up again.")
-            )
-            logger.error(f"Invalid or expired email verification token")
-            return redirect("users:signup")
-
-    except SignatureExpired:
-        messages.error(request, _(
-            "Your token has expired. Please sign up again."))
-        logger.error(f"Expired email verification token")
-        return redirect("users:signup")
-
-    except BadSignature:
-        # Handle the case for tampering or bad token
-        logger.error(f"Invalid or tampered email verification token")
-        messages.error(request, _("Invalid token. Please sign up again."))
-        return redirect("users:signup")
-
-
 def signup_verify_email(request):
     token = request.GET.get("token")
     id = request.GET.get("id")
@@ -323,15 +249,14 @@ def signup_verify_email(request):
         return redirect("users:login")
 
     except SignatureExpired:
-        messages.error(request, _(
-            "Your token has expired. Please sign up again."))
         logger.error("Expired email verification token")
-        return redirect("users:signup")
+        return redirect_with_message(
+            request, "error", _("Your token has expired. Please sign up again."), "users:signup")
 
     except BadSignature:
         logger.error("Invalid or tampered email verification token")
-        messages.error(request, _("Invalid token. Please sign up again."))
-        return redirect("users:signup")
+        return redirect_with_message(
+            request, "error", _("Invalid token. Please sign up again."), "users:signup")
 
 
 class SignupUsernameView(SignupView):
@@ -536,16 +461,14 @@ class UserPasswordSetView(LoginRequiredMixin, CoreMixin, FormView):
         kwargs["user"] = self.request.user  # Pass the current user to the form
         return kwargs
 
-    # def form_valid(self, form):
-    #     form.save()  # Save the new password
-    #     messages.success(self.request, "Your password has been set successfully.")
-    #     return super(UserPasswordSetView, self).form_valid(form)
-
     def form_valid(self, form):
-        form.save()  # Save the new password
+        # Save the new password
+        form.save()
+
+        # Update the session with the new password hash
         update_session_auth_hash(
             self.request, form.user
-        )  # Update the session with the new password hash
+        )
         messages.success(
             self.request,
             _(
@@ -659,21 +582,21 @@ def verify_email_change(request):
         user.email2 = ""
         user.save()
 
-        messages.success(request, _("Your email address has been verified."))
-        return redirect("users:profile")
+        return redirect_with_message(
+            request, "success", _("Your email address has been verified."), "users:profile")
 
     except User.DoesNotExist:
-        messages.error(request, _("No user found with the provided token."))
         logger.error(f"No user found with the provided token")
-        return redirect("users:profile")
+        return redirect_with_message(
+            request, "error", _("No user found with the provided token."), "users:profile")
 
     except SignatureExpired:
-        messages.error(request, _("Your token has expired. Please try again."))
         logger.error(f"Expired email verification token")
-        return redirect("users:profile")
+        return redirect_with_message(
+            request, "error", _("Your token has expired. Please try again."), "users:profile")
 
     except BadSignature:
         # Handle the case for tampering or bad token
         logger.error(f"Invalid or tampered email verification token")
-        messages.error(request, _("Invalid token. Please try again."))
-        return redirect("users:profile")
+        return redirect_with_message(
+            request, "error", _("Invalid token. Please try again."), "users:profile")

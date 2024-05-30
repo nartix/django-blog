@@ -181,9 +181,9 @@ AUTH_USER_MODEL = "users.User"
 SESSION_ENGINE = "core.sessions.session_store"
 
 # only if you want to store static files in app directories
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

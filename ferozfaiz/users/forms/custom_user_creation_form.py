@@ -15,7 +15,7 @@ class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(min_length=3, max_length=30, required=True)
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
     password2 = forms.CharField(
-        label="Confirm Password", widget=forms.PasswordInput)
+        label=_("Confirm Password"), widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -27,7 +27,9 @@ class CustomUserCreationForm(UserCreationForm):
         # Check if the email already exists in the User or OAuthUser model
         if (UserAuthManager.does_email_exist(email)):
             raise ValidationError(
-                _("Email already exists. Please use a different email.")
+                self.instance.unique_error_message(
+                    self._meta.model, ["email"]
+                )
             )
         return email
 
@@ -37,16 +39,13 @@ class CustomUserCreationForm(UserCreationForm):
         try:
             validate_email(username)
         except forms.ValidationError:
-            # If it's not a valid email, return the username
-            return username
+            if UserAuthManager.does_username_exist(username):
+                raise ValidationError(
+                    self.instance.unique_error_message(
+                        self._meta.model, ["username"]
+                    ))
+            else:
+                return username
         else:
             # If it's a valid email, raise an error
-            raise ValidationError("Username cannot be an email address.")
-
-    # defualt django form is already checking for username as case insensitive
-    # def clean_username(self):
-    #     username = self.cleaned_data.get('username')
-    #     if User.objects.filter(username__iexact=username).exists():
-    #         raise ValidationError(
-    #             _("A user with that username already exists."))
-    #     return username
+            raise ValidationError(_("Username cannot be an email address."))

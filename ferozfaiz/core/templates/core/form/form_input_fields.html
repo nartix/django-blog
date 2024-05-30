@@ -12,7 +12,7 @@
                   placeholder="{{ field.label }}"
                   class="text-sm sm:text-base relative w-full border border-gray-300 {% if field.errors %}border-red-500{% else %}focus:border-teal-500{% endif %} rounded placeholder-gray-400 focus:outline-none py-2 px-4">{{ field.value|default_if_none:'' }}</textarea>
       {% else %}
-        <input {% if field.name in validation_check %}x-data hx-post="{{ action_url }}{{ field.name }}/" hx-vals='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' hx-indicator="#ind_{{ field.name }}" data-fragment-request="true" {% endif %}
+        <input {% if field.name in validation_check %} x-data hx-post="{{ action_url }}{{ field.name }}/" hx-vals='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' hx-indicator="#ind_{{ field.name }}" data-fragment-request="true" {% endif %}
                id="{{ field.name }}"
                name="{{ field.name }}"
                type="{{ field.field.widget.input_type }}"

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './components/**/*.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./index.html', './components/**/*.html', './src/**/*.{js,ts,jsx,tsx}', './../../ferozfaiz/templates/**/*.html'],
   theme: {
     fontFamily: {
       // Add the font name to the list of fonts

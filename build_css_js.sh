@@ -12,15 +12,15 @@ if [ $? -eq 0 ]; then
 
     # Define source and target directories for JS and CSS
     src_js_dir="vitejs/portfolio/dist/assets"
-    target_js_dir="ferozfaiz/core/static/js"
+    target_js_dir="ferozfaiz/static/js"
     src_css_dir="vitejs/portfolio/dist/assets"
-    target_css_dir="ferozfaiz/core/static/css"
+    target_css_dir="ferozfaiz/static/css"
 
     # Copy and rename JS file
-    cp -f ${src_js_dir}/main-*.js ${target_js_dir}/index.js
+    cp -f ${src_js_dir}/index-*.js ${target_js_dir}/index.js
 
     # Copy and rename CSS file
-    cp -f ${src_css_dir}/main-*.css ${target_css_dir}/index.css
+    cp -f ${src_css_dir}/index-*.css ${target_css_dir}/index.css
 
     echo "Files copied successfully."
 else

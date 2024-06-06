@@ -1,5 +1,4 @@
 from logging import Handler
-from django.utils import timezone
 from core.tasks_kafka import django_logger_task
 import logging
 

@@ -1,0 +1,7 @@
+{% load i18n %}{% autoescape off %}{% blocktrans %}Hello from Feroz!{% endblocktrans %}
+
+{% block content %}{% endblock content %}
+
+{% blocktrans  %}Thank you for using the website!
+https://ferozfaiz.com{% endblocktrans %}
+{% endautoescape %}

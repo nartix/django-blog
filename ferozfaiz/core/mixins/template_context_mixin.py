@@ -9,10 +9,13 @@ from django.conf import settings
 class TemplateContextMixin(ContextMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = self.get_title()
-        context["template"] = self.get_template_name()
-        context["next"] = self.get_next_url()
-        context["APPDATA"] = settings.APPDATA
+        context.update({
+            "title": self.get_title(),
+            "template": self.get_template_name(),
+            "next": self.get_next_url(),
+            "APPDATA": settings.APPDATA,
+            "DEBUG": settings.DEBUG
+        })
         return context
 
     def get_next_url(self):

@@ -39,12 +39,12 @@ export default defineConfig({
     port: 3000,
     host: true, // or '0.0.0.0'
   },
-  build: {
-    rollupOptions: {
-      input: {
-        ...getHtmlEntries(path.resolve(__dirname, 'components')),
-        index: path.resolve(__dirname, 'index.html'), // Include the index.html file at the root directory
-      },
-    },
-  },
+  // build: {
+  //   rollupOptions: {
+  //     input: {
+  //       ...getHtmlEntries(path.resolve(__dirname, 'components')),
+  //       index: path.resolve(__dirname, 'index.html'), // Include the index.html file at the root directory
+  //     },
+  //   },
+  // },
 });

@@ -1,21 +1,29 @@
-      {% load static %}
-      {% load i18n %}
-      <!-- Login/User button -->
-      <div class="md:ml-0 ml-auto" id="user-status" {% if is_htmx_request %}hx-swap-oob="#user-status"{% endif %}>
-          {% if user.is_authenticated %}
-            <span class="hidden md:inline px-2 text-gray-800 text-opacity-75 ">
-              Hello, <span class="font-bold"> <a href="{% url 'users:profile' %}" >{{ user.username|truncatechars:10 }}</a>!</span>
-            </span>
-            <!-- Logout form -->
-            <form action="{% url 'users:logout' %}" method="post" style="display: inline;">
-              {% csrf_token %}
-              <button type="submit" @click="menuOpen = false" class="ml-1 border-[1px] border-gray-400 border-opacity-40 px-3 py-1 bg-[#a8c3c7] bg-opacity-20 hover:bg-opacity-70 text-gray-800 text-opacity-75 font-bold rounded">
-                {% trans "Logout" %}
-              </button>
-            </form>
-          {% else %}
-            <a href="{% url 'users:login' %}{% if next %}?next={{ next }}{% endif %}" @click="menuOpen = false" class="border-[1px] border-gray-400 border-opacity-40 px-3 py-1 bg-[#a8c3c7] bg-opacity-20 hover:bg-opacity-70 text-gray-800 text-opacity-75 font-bold rounded">
-              {% trans "Login" %}
-            </a>
-          {% endif %}
-      </div>
+{% load static %}
+{% load i18n %}
+<!-- Login/User button -->
+<div class="md:ml-0 ml-auto"
+     id="user-status"
+     {% if is_htmx_request %}hx-swap-oob="#user-status"{% endif %}>
+  {% if user.is_authenticated %}
+    <span class="px-2 text-gray-800 text-opacity-75 ">
+      <span class="hidden md:inline">Hello,</span> <span class="font-bold"> <a href="{% url 'users:profile' %}">{{ user.username|truncatechars:10 }}</a>!</span>
+    </span>
+    <!-- Logout form -->
+    <form action="{% url 'users:logout' %}"
+          method="post"
+          class="hidden md:inline">
+      {% csrf_token %}
+      <button type="submit"
+              @click="menuOpen = false"
+              class="ml-1 border-[1px] border-gray-400 border-opacity-40 px-3 py-1 bg-[#a8c3c7] bg-opacity-20 hover:bg-opacity-70 text-gray-800 text-opacity-75 font-bold rounded">
+        {% trans "Logout" %}
+      </button>
+    </form>
+  {% else %}
+    <a href="{% url 'users:login' %}{% if next %}?next={{ next }}{% endif %}"
+       @click="menuOpen = false"
+       class="border-[1px] border-gray-400 border-opacity-40 px-3 py-1 bg-[#a8c3c7] bg-opacity-20 hover:bg-opacity-70 text-gray-800 text-opacity-75 font-bold rounded">
+      {% trans "Login" %}
+    </a>
+  {% endif %}
+</div>

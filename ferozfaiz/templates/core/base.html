@@ -64,7 +64,7 @@
             <!-- User status -->
             {% include "users/partials/user_status.html" %}
             <!-- Mobile menu button -->
-            <div class="md:hidden mr-1 ml-5">
+            <div class="md:hidden mr-1 ml-2 md:ml-5">
               <button class="text-gray-900 text-opacity-80 hover:text-opacity-100 focus:outline-none relative"
                       @click="menuOpen = ! menuOpen">
                 <!-- Bars Icon -->
@@ -93,6 +93,14 @@
                  @click="menuOpen = false"
                  class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "About" %}</a>
               <a href="{% static "files/feroz-resume-v2.pdf" %}" target="_blank" hx-boost="false" @click="menuOpen = false" class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Resume" %} </a>
+              <form action="{% url 'users:logout' %}"
+                    method="post"
+                    class="block px-4 py-2">
+                {% csrf_token %}
+                <button type="submit"
+                        @click="menuOpen = false"
+                        class="hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Logout" %}</button>
+              </form>
             </div>
           </nav>
         </header>

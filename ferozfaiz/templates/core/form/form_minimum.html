@@ -2,7 +2,7 @@
 {% load static %}
 {% if is_htmx_request %}
   <title>{{ title }}</title>
-  {% include "users/partials/user_status.html" %}
+  {% include "core/partials/core_partials.html" %}
 {% endif %}
 <!-- Login Section -->
 <section class="container mx-auto max-w-md flex flex-row flex-grow items-center justify-center">

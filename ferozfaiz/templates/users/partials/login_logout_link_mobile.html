@@ -1,0 +1,19 @@
+{% load static %}
+{% load i18n %}
+<div id="user-login-logout-links"
+     {% if is_htmx_request %}hx-swap-oob="#user-login-logout-links"{% endif %}>
+    {% if user.is_authenticated %}
+        <form action="{% url 'users:logout' %}"
+              method="post"
+              class="block px-4 py-2">
+            {% csrf_token %}
+            <button type="submit"
+                    @click="menuOpen = false"
+                    class="hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Logout" %}</button>
+        </form>
+    {% else %}
+        <a href="{% url 'users:login' %}{% if next %}?next={{ next }}{% endif %}"
+           @click="menuOpen = false"
+           class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Login" %}</a>
+    {% endif %}
+</div>

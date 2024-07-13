@@ -1,27 +1,30 @@
 {% load i18n %}
 {% load static %}
-
 {% if is_htmx_request %}
   <title>{{ title }}</title>
-  {% include 'users/partials/user_status.html' %}
+  {% include "core/partials/core_partials.html" %}
 {% endif %}
-
-<section id="signup-email-validation-sent-page" class="flex flex-col flex-grow items-center justify-center">
-    <div class="container max-w-screen-lg py-10 text-center mx-2">
-      <div class="bg-white/75 shadow-xl rounded-lg p-8 md:p-12 lg:p-16 mx-2">
-        <h2 class="text-3xl font-bold text-gray-800 mb-4">{% trans 'Validate Your Email Address' %}</h2>
-        <p class="text-xl font-semibold text-gray-800 mb-5">
-          {% trans "We've sent an email validation link to the address you provided during sign up." %}
-        </p>
-        <p class="text-gray-600 mb-6">
-          {% blocktrans %}Please check your email and click on the link to verify your email address. If you have not received the email, check your spam folder or you can request to resend the validation email.{% endblocktrans %}
-        </p>
-        <span id="resend-email-validation-link">
-          <a href="{% url 'users:verify_email_resend' %}" hx-post="{% url 'users:verify_email_resend' %}" hx-target="#resend-email-validation-link" hx-vals='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' class="inline-block bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-700 transition-colors">{% trans 'Resend Validation Email' %}</a>
-        </span>
-        <div class="mt-6">
-          <a href="{% url 'users:login' %}" class="text-blue-500 hover:underline">{% trans 'Back to Login' %}</a>
-        </div>
+<section id="signup-email-validation-sent-page"
+         class="flex flex-col flex-grow items-center justify-center">
+  <div class="container max-w-screen-lg py-10 text-center mx-2">
+    <div class="bg-white/75 shadow-xl rounded-lg p-8 md:p-12 lg:p-16 mx-2">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">{% trans 'Validate Your Email Address' %}</h2>
+      <p class="text-xl font-semibold text-gray-800 mb-5">
+        {% trans "We've sent an email validation link to the address you provided during sign up." %}
+      </p>
+      <p class="text-gray-600 mb-6">
+        {% blocktrans %}Please check your email and click on the link to verify your email address. If you have not received the email, check your spam folder or you can request to resend the validation email.{% endblocktrans %}
+      </p>
+      <span id="resend-email-validation-link">
+        <a href="{% url 'users:verify_email_resend' %}"
+           hx-post="{% url 'users:verify_email_resend' %}"
+           hx-target="#resend-email-validation-link"
+           hx-vals='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'
+           class="inline-block bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-700 transition-colors">{% trans 'Resend Validation Email' %}</a>
+      </span>
+      <div class="mt-6">
+        <a href="{% url 'users:login' %}" class="text-blue-500 hover:underline">{% trans 'Back to Login' %}</a>
       </div>
     </div>
+  </div>
 </section>

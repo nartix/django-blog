@@ -2,7 +2,7 @@
 {% load static %}
 {% if is_htmx_request %}
   <title>{{ title }}</title>
-  {% include "users/partials/user_status.html" %}
+  {% include "core/partials/core_partials.html" %}
 {% endif %}
 <section class="flex-1">
   <div class="container max-w-screen-lg mx-auto py-10 flex-1">

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "corsheaders",
+    "corsheaders",
     "django_celery_results",
     "core.apps.CoreConfig",
     "users.apps.UsersConfig",
@@ -58,7 +58,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -322,9 +322,9 @@ APPDATA = {
 
 # only if you have django-cors-headers installed and added to INSTALLED_APPS
 # cors headers settings are needed if you are going to make api calls from browser or mobile app
-# CORS_ALLOWED_ORIGINS = [
-#     "https://devops.dala-ling.ts.net",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "https://devopsv3.dala-ling.ts.net",
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://djangotest.ferozfaiz.com",

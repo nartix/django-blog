@@ -15,7 +15,7 @@ ENV VAULT_TOKEN={{ .Data.data.VAULT_TOKEN }}
 # Set work directory
 WORKDIR /app
 
-COPY ./django/requirements.txt /app/
+COPY ./requirements.txt /app/
 
 # psycopg2 dependencies otherwise it fails to install with error: pg_config executable not found
 # RUN apt-get update && apt-get install -y libpq-dev gcc python3-dev musl-dev
@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y wget unzip \
     && apt-get clean
 
 # Copy project
-COPY ./django/ /app/
+COPY ./ /app/
 
 RUN chmod +x /app/update_cert.sh /app/start_app.sh
 

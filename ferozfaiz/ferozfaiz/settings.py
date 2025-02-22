@@ -318,6 +318,7 @@ APPDATA = {
     "TIPTAP_INLINE_CODE_HIGHLIGHT_GIT_URL": os.environ.get('TIPTAP_INLINE_CODE_HIGHLIGHT_GIT_URL'),
     "DJANGO_BLOG_URL": os.environ.get('DJANGO_BLOG_URL'),
     "DJANGO_BLOG_GIT_URL": os.environ.get('DJANGO_BLOG_GIT_URL'),
+    "FEROZ_RESUME_URL": os.environ.get('FEROZ_RESUME_URL'),
 }
 
 # only if you have django-cors-headers installed and added to INSTALLED_APPS

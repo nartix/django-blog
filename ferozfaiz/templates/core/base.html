@@ -59,7 +59,7 @@
               <a href="{% url 'core:projects' %}"  class="px-4 hover:text-gray-500">{% trans "Projects" %}</a>
               <a href="{% url 'blogs:blog_detail' 31 'about' %}"
                  class="px-4 hover:text-gray-500">{% trans "About" %}</a>
-              <a href="{% static "files/feroz-resume-v2.pdf" %}" target="_blank" hx-boost="false" class="px-4 hover:text-gray-500">{% trans "Resume" %}</a>
+              <a href="{{ APPDATA.FEROZ_RESUME_URL }}" target="_blank" hx-boost="false" class="px-4 hover:text-gray-500">{% trans "Resume" %}</a>
             </div>
             <!-- User status -->
             {% include "users/partials/user_status.html" %}
@@ -92,7 +92,7 @@
               <a href="{% url 'blogs:blog_detail' 31 'about' %}"
                  @click="menuOpen = false"
                  class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "About" %}</a>
-              <a href="{% static "files/feroz-resume-v2.pdf" %}" target="_blank" hx-boost="false" @click="menuOpen = false" class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Resume" %} </a>
+              <a href="{{ APPDATA.FEROZ_RESUME_URL }}" target="_blank" hx-boost="false" @click="menuOpen = false" class="block px-4 py-2 hover:text-gray-500 text-gray-900 text-opacity-80">{% trans "Resume" %} </a>
               {% include "users/partials/login_logout_link_mobile.html" %}
             </div>
           </nav>

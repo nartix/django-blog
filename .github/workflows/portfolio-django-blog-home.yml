@@ -49,7 +49,7 @@ jobs:
           VAULT_TOKEN: ${{ secrets.DJANGO_VAULT_TOKEN }}
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
         run: |
-          sed -i 's#{{ .Data.data.VAULT_ADDR }}#'"$VAULT_ADDR"'#g' django/Dockerfile.prod
-          sed -i 's#{{ .Data.data.VAULT_TOKEN }}#'"$VAULT_TOKEN"'#g' django/Dockerfile.prod
-          docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f django/Dockerfile.prod
+          sed -i 's#{{ .Data.data.VAULT_ADDR }}#'"$VAULT_ADDR"'#g' Dockerfile.prod
+          sed -i 's#{{ .Data.data.VAULT_TOKEN }}#'"$VAULT_TOKEN"'#g' Dockerfile.prod
+          docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile.prod
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

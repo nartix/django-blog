@@ -2,7 +2,9 @@ name: Deploy Django Blog Home to ECR
 
 on:
   push:
-    branches: [django-home-docker]
+    tags:
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,8 +14,9 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          ref: django-home-docker
+        # Optionally remove or modify the custom ref if you want to use the tag commit
+        # with:
+        #   ref: django-home-docker
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -28,16 +31,25 @@ jobs:
         with:
           mask-password: 'true'
 
+      - name: Set IMAGE_TAG and Output
+        id: set-image-tag
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          SHORT_SHA=${GITHUB_SHA::8}
+          IMAGE_TAG="${TAG_NAME}-${SHORT_SHA}"
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "Current tag name: $TAG_NAME"
+
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: portfolio-django-home
           VAULT_ADDR: ${{ secrets.DJANGO_VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.DJANGO_VAULT_TOKEN }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
         run: |
           sed -i 's#{{ .Data.data.VAULT_ADDR }}#'"$VAULT_ADDR"'#g' django/Dockerfile.prod
           sed -i 's#{{ .Data.data.VAULT_TOKEN }}#'"$VAULT_TOKEN"'#g' django/Dockerfile.prod
-          export IMAGE_TAG=$(date '+%Y.%m.%d.%N')
           docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f django/Dockerfile.prod
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV

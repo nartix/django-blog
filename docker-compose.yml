@@ -1,3 +1,4 @@
+# ct "docker-compose.yml:temp.yml" && sudo docker compose -f temp.yml up django --build; rm temp.yml
 services:
   django:
     build:

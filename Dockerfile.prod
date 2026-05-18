@@ -7,11 +7,6 @@ ENV PYTHONUNBUFFERED 1
 ENV DJANGO_SETTINGS_MODULE=ferozfaiz.settings
 ENV PYTHONPATH=/app/ferozfaiz:$PYTHONPATH
 
-# {{ with secret "kv/data/django_token" }}
-ENV VAULT_ADDR={{ .Data.data.VAULT_ADDR }}
-ENV VAULT_TOKEN={{ .Data.data.VAULT_TOKEN }}
-# {{ end }}
-
 # Set work directory
 WORKDIR /app
 
@@ -26,27 +21,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc libpq-dev &
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-ENV ENVCONSUL_VERSION 0.13.2
-RUN apt-get update && apt-get install -y wget unzip \
-    && wget https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip \
-    && unzip envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip -d /usr/local/bin \
-    && chmod +x /usr/local/bin/envconsul \
-    && rm -rf envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip \
-    && apt-get remove -y wget unzip \
-    && apt-get autoremove -y \
-    && apt-get clean
-
 # Copy project
 COPY ./ /app/
 
-RUN chmod +x /app/update_cert.sh /app/start_app.sh
-
-# Collect static files
-RUN envconsul -config=/app/envconsul-config.hcl -- python ferozfaiz/manage.py collectstatic --noinput
+RUN chmod +x /app/update_cert.sh /app/start_app.sh /app/docker-entrypoint.prod.py
 
 # Application port
 EXPOSE 8000
 
 # Run Gunicorn
 # CMD gunicorn ferozfaiz.wsgi:application --bind 0.0.0.0:8000
-CMD ["envconsul", "-config=/app/envconsul-config.hcl", "--", "/app/start_app.sh", "prod"]
+ENTRYPOINT ["/app/docker-entrypoint.prod.py"]
+CMD ["prod"]

@@ -2,6 +2,7 @@ from elasticsearch_dsl import connections
 from elasticsearch.transport import Transport
 from django.apps import AppConfig
 from django.conf import settings
+import sys
 
 
 class HeaderInjectingTransport(Transport):
@@ -21,13 +22,37 @@ class CoreConfig(AppConfig):
     name = 'core'
 
     def ready(self):
+        if self._should_skip_elasticsearch_init():
+            return
+
         # Use the header-injecting transport class for Elasticsearch connection
         connections.create_connection(
-            hosts=[settings.ELASTICSEARCH_SERVER_1,
-                   settings.ELASTICSEARCH_SERVER_2],
+            hosts=self._elasticsearch_hosts(),
             transport_class=HeaderInjectingTransport
         )
 
-        # Initialize documents as before
-        from core.documents import DjangoLogRecord
-        DjangoLogRecord.init()
+        try:
+            from core.documents import DjangoLogRecord
+            DjangoLogRecord.init()
+        except Exception as exc:
+            print(f"Elasticsearch index initialization skipped: {exc}", flush=True)
+
+    def _should_skip_elasticsearch_init(self):
+        disabled = not getattr(settings, "ELASTICSEARCH_INIT_ON_STARTUP", True)
+        management_commands = {"check", "collectstatic", "makemigrations", "migrate", "test"}
+
+        return (
+            disabled
+            or not self._elasticsearch_hosts()
+            or not settings.ELASTICSEARCH_CLIENT_ID
+            or not settings.ELASTICSEARCH_CLIENT_SECRET
+            or any(command in sys.argv for command in management_commands)
+        )
+
+    def _elasticsearch_hosts(self):
+        return [
+            host for host in [
+                settings.ELASTICSEARCH_SERVER_1,
+                settings.ELASTICSEARCH_SERVER_2,
+            ] if host
+        ]

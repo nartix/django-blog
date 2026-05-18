@@ -74,7 +74,11 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.*
+!.env.example
 .env.test
+vault-agent/.vault-token
+vault-agent/*.token
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

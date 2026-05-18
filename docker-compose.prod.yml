@@ -1,0 +1,83 @@
+x-app-base: &app-base
+  build:
+    context: .
+    dockerfile: Dockerfile.prod
+  image: django-blog:local
+  restart: unless-stopped
+  environment:
+    DJANGO_DEBUG: "False"
+    DJANGO_COLLECTSTATIC: "false"
+    ELASTICSEARCH_INIT_ON_STARTUP: "false"
+    VAULT_ENV_FILE: /vault/secrets/app.env
+    VAULT_ENV_TIMEOUT: "180"
+  volumes:
+    - vault-secrets:/vault/secrets:ro
+  depends_on:
+    vault-agent:
+      condition: service_healthy
+
+services:
+  vault-agent:
+    image: hashicorp/vault:1.21.4
+    container_name: django-blog-vault-agent
+    user: "0:0"
+    entrypoint: ["vault"]
+    command: ["agent", "-config=/vault/config/agent.hcl", "-log-level=info"]
+    environment:
+      VAULT_ADDR: ${VAULT_ADDR:?Set VAULT_ADDR before starting Docker Compose}
+    secrets:
+      - source: vault-token
+        target: vault-token
+    volumes:
+      - ./vault-agent/agent.hcl:/vault/config/agent.hcl:ro
+      - ./vault-agent/templates:/vault/templates:ro
+      - vault-secrets:/vault/secrets
+    healthcheck:
+      test: ["CMD-SHELL", "test -s /vault/secrets/app.env && test -s /vault/secrets/postgresql-ca.crt"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+    restart: unless-stopped
+
+  django:
+    <<: *app-base
+    container_name: django-blog-web
+    command: ["prod"]
+    environment:
+      DJANGO_DEBUG: "False"
+      DJANGO_COLLECTSTATIC: "true"
+      ELASTICSEARCH_INIT_ON_STARTUP: "false"
+      VAULT_ENV_FILE: /vault/secrets/app.env
+      VAULT_ENV_TIMEOUT: "180"
+    ports:
+      - "8000:8000"
+
+  celery:
+    <<: *app-base
+    container_name: django-blog-celery
+    command: ["celery"]
+
+  kafka-consumer:
+    <<: *app-base
+    container_name: django-blog-kafka-consumer
+    command: ["kafka"]
+    environment:
+      DJANGO_DEBUG: "False"
+      DJANGO_COLLECTSTATIC: "false"
+      ELASTICSEARCH_INIT_ON_STARTUP: "false"
+      VAULT_ENV_FILE: /vault/secrets/app.env
+      VAULT_ENV_TIMEOUT: "180"
+      KAFKA_TOPIC: djangologs
+      KAFKA_TOPIC_GROUP: djangologs-group
+
+volumes:
+  vault-secrets:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=16m,mode=0700
+
+secrets:
+  vault-token:
+    file: ${VAULT_TOKEN_FILE:-./vault-agent/.vault-token}

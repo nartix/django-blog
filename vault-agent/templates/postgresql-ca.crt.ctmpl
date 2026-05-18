@@ -1,0 +1,1 @@
+{{ with secret "kv/data/POSTGRESQL" }}{{ .Data.data.POSTGRESQL_CRT }}{{ end }}

@@ -9,10 +9,13 @@ secrets into the shared `vault-secrets` tmpfs volume, and the app containers rea
 Vault Agent reads the Vault address from `VAULT_ADDR`; it is not hardcoded in
 the Compose file or agent config.
 
-Set the Vault address and create a local token file before starting Compose:
+Set the Vault address, create a token with the deployment policy, and save the
+generated token in a local file before starting Compose:
 
 ```sh
 export VAULT_ADDR='<vault-address>'
+vault token create -policy="django-blog-ferozfaiz-com" -ttl="0"
+# Copy the generated token value into the file below.
 printf '%s' '<vault-token>' > vault-agent/.vault-token
 chmod 600 vault-agent/.vault-token
 ```

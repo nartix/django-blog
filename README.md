@@ -1,6 +1,6 @@
 ## About the project
 
-I developed ferozfaiz.com using Django, focusing on a fully server-side rendered architecture. To enhance interactivity and reactivity, I integrated HTMX and AlpineJS. Additionally, I implemented OAuth 2.0 authentication, supporting both Google and Microsoft. I used RabbitMQ/Celery to send emails. Kakfa was used to ship logs to ElasticSearch/Grafana. I also used Hashicorp Vault to store secrets. The application is deployed on Kubernetes.
+I developed ferozfaiz.com using Django, focusing on a fully server-side rendered architecture. To enhance interactivity and reactivity, I integrated HTMX and AlpineJS. Additionally, I implemented OAuth 2.0 authentication, supporting both Google and Microsoft. I used RabbitMQ/Celery to send emails. Kafka was used to ship logs to ElasticSearch/Grafana. I also used Hashicorp Vault to store secrets. The current deployment uses Docker Compose with a Vault Agent; the Kubernetes manifests are retained from the earlier deployment.
 
 Live Demo: <a href='https://ferozfaiz.com/'>ferozfaiz.com</a>
 
@@ -16,13 +16,19 @@ Live Demo: <a href='https://ferozfaiz.com/'>ferozfaiz.com</a>
 - HTMX
 - AlpineJS
 - Docker
-- Kubernetes
+- Docker Compose
 - ViteJS
 - Tiptap
 - Hashicorp Vault
 - Google & Microsoft OAuth 2.0
 - Amazon SES
 - AWS ECR
+
+## Current production deployment
+
+`docker-compose.prod.yml` runs Django/Gunicorn, Celery, the Kafka consumer, and a Vault Agent. The agent renders configuration and the PostgreSQL CA certificate into a shared in-memory volume. Application containers mount that volume read-only, and the web service binds only to `127.0.0.1:8000` behind the existing public routing.
+
+Build and recreate the web service using the production Compose file and the operator's existing Vault configuration. Keep the Vault token outside source control. The GitHub Actions workflow builds and pushes images to ECR; it does not roll out the running Compose services. See [Vault Agent setup](vault-agent/README.md) for the production inputs.
 
 ## Screenshots
 
